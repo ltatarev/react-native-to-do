@@ -18,8 +18,8 @@ class Login extends Component {
   }
 
   addNewUser = username => {
-    if (this.userExists(username)) {
-      this.props.login(this.getUserId(username));
+    if (this.existingUserId(username) != null) {
+      this.props.login(this.existingUserId(username));
     } else {
       this.props.addUser(username);
     }
@@ -27,21 +27,14 @@ class Login extends Component {
     this.props.navigation.navigate('Home');
   };
 
-  userExists(username, currentName) {
-    for (let name of Object.values(this.props.users)) {
-      if (username === name.username) {
-        return true;
-      }
-      return false;
+  existingUserId(username) {
+    const foundUsers = Object.values(this.props.users).filter(
+      user => user.username === username,
+    );
+    if (foundUsers.length === 0) {
+      return null;
     }
-  }
-
-  getUserId(username) {
-    for (let name of Object.values(this.props.users)) {
-      if (username === name.username) {
-        return name.id;
-      }
-    }
+    return foundUsers[0].id;
   }
 
   render() {

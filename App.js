@@ -31,9 +31,11 @@ const pReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = createStore(pReducer, applyMiddleware(logger));
 export const persistor = persistStore(store);
+/* persistor.purge(); */
 
 /* export const store = createStore(rootReducer, applyMiddleware(logger));
  */
+
 const AppNavigator = createStackNavigator(
   {
     Login: LoginView,

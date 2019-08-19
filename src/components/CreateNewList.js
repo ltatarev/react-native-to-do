@@ -18,8 +18,8 @@ class CreateNewList extends Component {
     this.state = { listName: '' };
   }
 
-  addNewList = listName => {
-    this.props.addList(listName);
+  addNewList = (listName, currentUserId) => {
+    this.props.addList(listName, currentUserId);
     this.setState({ listName: '' });
     this.props.navigation.navigate('Home');
   };
@@ -35,9 +35,9 @@ class CreateNewList extends Component {
         />
         <Button
           onPress={() => {
-            this.addNewList(this.state.listName);
+            this.addNewList(this.state.listName, this.props.currentUserId);
           }}
-          title="Add"
+          title="Create list"
         />
       </View>
     );
@@ -52,7 +52,15 @@ const styles = StyleSheet.create({
   },
 });
 
+const mapStateToProps = state => {
+  return {
+    currentUserId: state.currentUserReducer
+      ? state.currentUserReducer[0].currentUser
+      : null,
+  };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { addList },
 )(withNavigation(CreateNewList));

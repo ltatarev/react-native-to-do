@@ -2,27 +2,63 @@ import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import { StyleSheet, Button, View, Text, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  Button,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
+
+import { toggleTodo } from '../actions/addTodo';
 
 class EditExistingList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentListId: this.getNavigationParams().currentListId,
+    };
+  }
+
+  getNavigationParams() {
+    return this.props.navigation.state.params || {};
+  }
+
+  toggleTodo = id => {
+    this.props.toggleTodo(id);
+  };
+
   render() {
+    const todoLen = this.props.todos.length;
     return (
       <View style={styles.container}>
+        <Text>{todoLen ? '' : 'No tasks created yet :('}</Text>
         <FlatList
           data={this.props.todos}
           renderItem={({ item }) => (
-            <Button
+            <TouchableOpacity
+              key={item.id}
               onPress={() => {
-                this.props.navigation.navigate('EditExistingList');
+                this.toggleTodo(item.id);
               }}
-              title={item.name}
-            />
+            >
+              <Text
+                style={{
+                  textDecorationLine: item.completed ? 'line-through' : 'none',
+                }}
+              >
+                {item.name}
+              </Text>
+            </TouchableOpacity>
           )}
           keyExtractor={(item, index) => index.toString()}
         />
         <Button
           onPress={() => {
-            this.props.navigation.navigate('CreateNewToDo');
+            this.props.navigation.navigate('CreateNewToDo', {
+              currentListId: this.state.currentListId,
+            });
           }}
           title="Add new task"
         />
@@ -41,11 +77,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    todos: state.todos,
+    todos: state.currentUserReducer
+      ? state.todoReducer.filter(
+          todo => todo.listId === state.currentUserReducer[0].currentList,
+        )
+      : null,
   };
 };
 
 export default connect(
   mapStateToProps,
-  null,
+  { toggleTodo },
 )(withNavigation(EditExistingList));

@@ -5,7 +5,8 @@ const listReducer = (state = [], action) => {
         ...state,
         {
           id: action.payload.id,
-          name: action.payload.content,
+          name: action.payload.name,
+          userId: action.payload.userId,
         },
       ];
     default:

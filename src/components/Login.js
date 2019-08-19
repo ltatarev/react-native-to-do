@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import { StyleSheet, TextInput, View, Button } from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import { addUser, ADD_USER } from '../actions/addUser';
 
 const mapDispatchToProps = dispatch => {
@@ -19,11 +25,8 @@ class Login extends Component {
 
   addNewUser = username => {
     this.props.addUser(username);
-    let currentId = this.state.users
-      .filter(e => e.username === this.state.username)
-      .map(e => e.id);
     this.setState({ username: '' });
-    this.props.navigation.navigate('Home', { userId: currentId });
+    this.props.navigation.navigate('Home');
   };
 
   render() {
@@ -35,12 +38,17 @@ class Login extends Component {
           onChangeText={username => this.setState({ username })}
           value={this.state.username}
         />
-        <Button
+        <TouchableOpacity
+          disabled={
+            !this.state.username ||
+            (this.state.username.match('\\s+') ? true : false)
+          }
           onPress={() => {
             this.addNewUser(this.state.username);
           }}
-          title="Submit"
-        />
+        >
+          <Text>LOGIN</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -59,13 +67,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
-  return {
-    users: state.users,
-  };
-};
-
 export default connect(
-  mapStateToProps,
+  null,
   { addUser },
 )(withNavigation(Login));

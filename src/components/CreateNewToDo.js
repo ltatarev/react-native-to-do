@@ -8,13 +8,22 @@ import { addTodo, ADD_TODO } from '../actions/addTodo';
 class CreateNewToDo extends Component {
   constructor(props) {
     super(props);
-    this.state = { text: '' };
+    this.state = {
+      text: '',
+      currentListId: this.getNavigationParams().currentListId,
+    };
   }
 
-  addNewTodo = text => {
-    this.props.addTodo(text);
+  getNavigationParams() {
+    return this.props.navigation.state.params || {};
+  }
+
+  addNewTodo = (text, currentListId) => {
+    this.props.addTodo(text, currentListId);
     this.setState({ text: '' });
-    this.props.navigation.navigate('EditExistingList');
+    this.props.navigation.navigate('EditExistingList', {
+      currentListId: this.state.currentListId,
+    });
   };
 
   render() {
@@ -28,9 +37,9 @@ class CreateNewToDo extends Component {
         />
         <Button
           onPress={() => {
-            this.addNewTodo(this.state.text);
+            this.addNewTodo(this.state.text, this.state.currentListId);
           }}
-          title="Add to do"
+          title="+"
         />
       </View>
     );

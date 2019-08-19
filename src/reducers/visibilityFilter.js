@@ -1,6 +1,6 @@
 import { VisibilityFilters } from '../actions/addVisibility';
 
-export const visibilityFilterReducer = (
+const visibilityFilterReducer = (
   state = VisibilityFilters.SHOW_ALL,
   action,
 ) => {
@@ -11,3 +11,5 @@ export const visibilityFilterReducer = (
       return state;
   }
 };
+
+export default visibilityFilterReducer;

@@ -54,9 +54,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    (currentUserId: state.currentUserReducer
+    currentUserId: state.currentUserReducer
       ? state.currentUserReducer[0].currentUser
-      : null,)
+      : null,
   };
 };
 

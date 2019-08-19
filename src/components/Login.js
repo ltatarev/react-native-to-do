@@ -9,13 +9,7 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import { addUser, ADD_USER } from '../actions/addUser';
-
-const mapDispatchToProps = dispatch => {
-  return {
-    addUser: username => dispatch({ type: ADD_USER, payload: username }),
-  };
-};
+import { addUser, login } from '../actions/addUser';
 
 class Login extends Component {
   constructor(props) {
@@ -24,10 +18,31 @@ class Login extends Component {
   }
 
   addNewUser = username => {
-    this.props.addUser(username);
+    if (this.userExists(username)) {
+      this.props.login(this.getUserId(username));
+    } else {
+      this.props.addUser(username);
+    }
     this.setState({ username: '' });
     this.props.navigation.navigate('Home');
   };
+
+  userExists(username, currentName) {
+    for (let name of Object.values(this.props.users)) {
+      if (username === name.username) {
+        return true;
+      }
+      return false;
+    }
+  }
+
+  getUserId(username) {
+    for (let name of Object.values(this.props.users)) {
+      if (username === name.username) {
+        return name.id;
+      }
+    }
+  }
 
   render() {
     return (
@@ -67,7 +82,11 @@ const styles = StyleSheet.create({
   },
 });
 
+const mapStateToProps = state => {
+  return { users: state.usersReducer };
+};
+
 export default connect(
-  null,
-  { addUser },
+  mapStateToProps,
+  { addUser, login },
 )(withNavigation(Login));

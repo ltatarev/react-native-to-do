@@ -1,18 +1,31 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import OpenExistingList from '../components/OpenExistingList';
 
 export default class OpenExistingListView extends Component {
   static navigationOptions = {
-    headerTitle: 'Open existing list',
+    headerTitle: '🔖',
+    headerStyle: {
+      backgroundColor: '#D58A81',
+    },
   };
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.container}>
         <OpenExistingList />
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F9B5AC',
+  },
+});

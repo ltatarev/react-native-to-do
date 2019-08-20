@@ -1,11 +1,17 @@
 import React, { PureComponent } from 'react';
 import { withNavigation } from 'react-navigation';
-import { StyleSheet, Button, FlatList, View, Text } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  View,
+  Text,
+} from 'react-native';
 import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
 import actions from '../actions';
-import selectCurrentList from '../selectors';
+import selectors from '../selectors';
 
 class OpenExistingList extends PureComponent {
   static get propTypes() {
@@ -23,22 +29,28 @@ class OpenExistingList extends PureComponent {
     });
   }
 
-  renderItemToButton = ({ item }) => (
-    <Button
+  renderItemToTouchOpac = ({ item }) => (
+    <TouchableOpacity
+      style={styles.button}
       onPress={() => this.setCurrentList(item.userId, item.id)}
-      title={item.name}
-    />
+      key={item.key}
+    >
+      <Text style={styles.text}>{item.name}</Text>
+    </TouchableOpacity>
   );
 
   render() {
     const { lists } = this.props;
     const listLen = lists.length;
     return (
-      <View style={styles.container}>
-        <Text>{listLen ? '' : 'No lists created yet :('}</Text>
+      <View>
+        <Text style={styles.none}>
+          {listLen ? '' : 'No lists created yet 😕'}
+        </Text>
         <FlatList
+          style={styles.list}
           data={lists}
-          renderItem={this.renderItemToButton}
+          renderItem={this.renderItemToTouchOpac}
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
@@ -52,11 +64,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  none: {
+    fontSize: 20,
+    marginTop: 20,
+    fontStyle: 'italic',
+  },
+  text: {
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    alignSelf: 'auto',
+    padding: 15,
+  },
 });
 
 const mapStateToProps = state => ({
   lists: state.listReducer.filter(
-    list => list.userId === selectCurrentList(state),
+    list => list.userId === selectors.selectCurrentUser(state),
   ),
 });
 

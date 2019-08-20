@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Button, FlatList, StyleSheet, View } from 'react-native';
+import { TouchableOpacity, FlatList, Text, StyleSheet } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
@@ -16,25 +16,30 @@ class Home extends PureComponent {
     };
   }
 
-  renderItemToButton = ({ item }) => {
+  renderButtonOnPress = ({ item }) => {
     const { currentUserId, navigation, logOutDispatch } = this.props;
     const userId = currentUserId;
-    return (
-      <Button
-        onPress={() => {
-          if (item.key === 'Log out') {
-            logOutDispatch(userId);
-            navigation.navigate(item.route);
-          } else {
-            navigation.navigate(item.route, {
-              userId,
-            });
-          }
-        }}
-        title={item.key}
-      />
-    );
+    if (item.key === 'Log out') {
+      logOutDispatch(userId);
+      navigation.navigate(item.route);
+    } else {
+      navigation.navigate(item.route, {
+        userId,
+      });
+    }
   };
+
+  renderItemToTouchOpac = ({ item }) => (
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => this.renderButtonOnPress({ item })}
+      key={item.key}
+    >
+      <Text style={item.key === 'Log out' ? styles.log : styles.text}>
+        {item.key}
+      </Text>
+    </TouchableOpacity>
+  );
 
   render() {
     const flatListData = [
@@ -49,18 +54,26 @@ class Home extends PureComponent {
       { key: 'Log out', route: 'Login' },
     ];
     return (
-      <View style={styles.container}>
-        <FlatList data={flatListData} renderItem={this.renderItemToButton} />
-      </View>
+      <FlatList data={flatListData} renderItem={this.renderItemToTouchOpac} />
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  button: {
+    alignSelf: 'center',
+    padding: 10,
+  },
+  text: {
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+  },
+  log: {
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    color: '#C4030C',
   },
 });
 

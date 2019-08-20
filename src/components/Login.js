@@ -57,7 +57,7 @@ class Login extends Component {
     return (
       <View style={styles.container}>
         <TextInput
-          style={{ padding: 10, fontSize: 20 }}
+          style={styles.title}
           placeholder="Username"
           onChangeText={name => {
             this.setState({ username: name });
@@ -65,12 +65,13 @@ class Login extends Component {
           value={username}
         />
         <TouchableOpacity
+          style={styles.submit}
           disabled={!username || username.match('\\s+')}
           onPress={() => {
             this.addNewUser(username);
           }}
         >
-          <Text>LOGIN</Text>
+          <Text style={styles.text}>LOGIN</Text>
         </TouchableOpacity>
       </View>
     );
@@ -82,11 +83,24 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#c9d7f8',
   },
   title: {
     justifyContent: 'center',
     padding: 20,
-    fontSize: 30,
+    fontSize: 25,
+    letterSpacing: 2,
+  },
+  submit: {
+    backgroundColor: '#56cbf9',
+    borderRadius: 25,
+  },
+  text: {
+    padding: 12,
+    fontSize: 15,
+    fontWeight: 'bold',
+    fontFamily: 'Avenir',
+    letterSpacing: 2,
   },
 });
 

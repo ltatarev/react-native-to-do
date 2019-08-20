@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
-import { StyleSheet, Button, View, TextInput } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  View,
+  TextInput,
+} from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import actions from '../actions';
 import services from '../services';
-import selectCurrentUser from '../selectors';
+import selectors from '../selectors';
 
 class CreateNewList extends Component {
   constructor(props) {
@@ -35,19 +41,22 @@ class CreateNewList extends Component {
     return (
       <View style={styles.container}>
         <TextInput
-          style={{ padding: 10, fontSize: 20 }}
+          style={styles.title}
           placeholder="List name"
           onChangeText={name => {
             this.setState({ listName: name });
           }}
           value={listName}
         />
-        <Button
+        <TouchableOpacity
+          style={styles.submit}
+          disabled={!listName || listName.match('\\s+')}
           onPress={() => {
             this.addNewList(listName);
           }}
-          title="Create list"
-        />
+        >
+          <Text style={styles.text}>CREATE LIST</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -59,10 +68,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  title: {
+    justifyContent: 'center',
+    padding: 20,
+    fontSize: 25,
+    letterSpacing: 2,
+  },
+  submit: {
+    backgroundColor: '#47867B',
+    borderRadius: 25,
+  },
+  text: {
+    padding: 12,
+    fontSize: 15,
+    fontWeight: 'bold',
+    fontFamily: 'Avenir',
+    letterSpacing: 2,
+  },
 });
 
 const mapStateToProps = state => ({
-  currentUserId: selectCurrentUser(state),
+  currentUserId: selectors.selectCurrentUser(state),
   lists: state.listReducer,
 });
 

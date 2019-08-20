@@ -1,19 +1,32 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import Home from '../components/Home';
 
 export default class HomeView extends Component {
   static navigationOptions = {
-    headerTitle: 'Home',
+    headerTitle: '🏠',
     headerLeft: null,
+    headerStyle: {
+      backgroundColor: '#A37E9B',
+    },
   };
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.container}>
         <Home />
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E0ACD5',
+  },
+});

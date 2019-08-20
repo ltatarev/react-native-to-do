@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 import { Provider } from 'react-redux';
@@ -38,7 +38,12 @@ export const persistor = persistStore(store);
 
 const AppNavigator = createStackNavigator(
   {
-    Login: LoginView,
+    Login: {
+      screen: LoginView,
+      navigationOptions: {
+        header: null,
+      },
+    },
     Home: HomeView,
     CreateNewList: CreateNewListView,
     CreateNewToDo: CreateNewToDoView,

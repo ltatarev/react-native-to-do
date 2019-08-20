@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import {
   StyleSheet,
-  Button,
   View,
   Text,
   FlatList,
@@ -13,7 +12,7 @@ import {
 
 import PropTypes from 'prop-types';
 import actions from '../actions';
-import selectCurrentList from '../selectors';
+import selectors from '../selectors';
 
 class EditExistingList extends Component {
   constructor(props) {
@@ -41,9 +40,22 @@ class EditExistingList extends Component {
     const { currentListId } = this.state;
     const todoLen = todos.length;
     return (
-      <View style={styles.container}>
-        <Text>{todoLen ? '' : 'No tasks created yet 😕'}</Text>
+      <View>
+        <TouchableOpacity
+          style={styles.addNew}
+          onPress={() => {
+            navigation.navigate('CreateNewToDo', {
+              currentListId,
+            });
+          }}
+        >
+          <Text style={{ fontWeight: 'bold', fontSize: 20 }}>+</Text>
+        </TouchableOpacity>
+        <Text style={styles.none}>
+          {todoLen ? '' : 'No tasks created yet 😕'}
+        </Text>
         <FlatList
+          style={styles.list}
           data={todos}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -63,30 +75,34 @@ class EditExistingList extends Component {
           )}
           keyExtractor={(item, index) => index.toString()}
         />
-        <Button
-          onPress={() => {
-            navigation.navigate('CreateNewToDo', {
-              currentListId,
-            });
-          }}
-          title="Add new task"
-        />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  none: {
+    fontSize: 20,
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  addNew: {
+    margin: 10,
+    alignSelf: 'flex-end',
+    padding: 10,
+    backgroundColor: '#A35DE1',
+    borderRadius: 25,
+  },
+  list: {
+    alignSelf: 'center',
+    padding: 10,
+    borderRadius: 5,
   },
 });
 
 const mapStateToProps = state => ({
   todos: state.todoReducer.filter(
-    todo => todo.listId === selectCurrentList(state),
+    todo => todo.listId === selectors.selectCurrentList(state),
   ),
 });
 

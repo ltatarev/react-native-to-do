@@ -1,4 +1,4 @@
-import { ADD_USER, LOG_OUT } from '../actions/addUser';
+import { ADD_USER, LOG_OUT } from '../actions/actionTypes';
 
 const usersReducer = (state = [], action) => {
   switch (action.type) {
@@ -7,11 +7,10 @@ const usersReducer = (state = [], action) => {
         ...state,
         {
           id: action.payload.id,
-          username: action.payload.content,
+          username: action.payload.username,
         },
       ];
     case LOG_OUT:
-      return state;
     default:
       return state;
   }

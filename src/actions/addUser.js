@@ -1,27 +1,23 @@
-export const ADD_USER = 'ADD_USER';
-export const LOGIN = 'LOGIN';
-export const LOG_OUT = 'LOG_OUT';
+import { ADD_USER, LOGIN, LOG_OUT } from './actionTypes';
 
-let nextUserId = 0;
-
-export const addUser = content => ({
+export const addUser = (id, username) => ({
   type: ADD_USER,
   payload: {
-    id: ++nextUserId,
-    content,
+    id,
+    username,
   },
 });
 
-export const login = content => ({
+export const login = id => ({
   type: LOGIN,
   payload: {
-    id: content,
+    id,
   },
 });
 
-export const logOut = content => ({
+export const logOut = id => ({
   type: LOG_OUT,
   payload: {
-    id: content,
+    id,
   },
 });

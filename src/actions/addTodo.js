@@ -1,13 +1,10 @@
-export const ADD_TODO = 'ADD_TODO';
-export const TOGGLE_TODO = 'TOGGLE_TODO';
+import { ADD_TODO, TOGGLE_TODO } from './actionTypes';
 
-let nextTodoId = 0;
-
-export const addTodo = (text, listId) => ({
+export const addTodo = (id, name, listId) => ({
   type: ADD_TODO,
   payload: {
-    id: nextTodoId++,
-    text,
+    id,
+    name,
     listId,
   },
 });

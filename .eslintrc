@@ -38,7 +38,7 @@
     "object-property-newline": [
       "error",
       {
-        "allowMultiplePropertiesPerLine": false
+        "allowMultiplePropertiesPerLine": true
       }
     ],
     "jsx-a11y/href-no-hash": "off",

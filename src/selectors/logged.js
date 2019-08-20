@@ -1,5 +1,5 @@
 export const selectLoggedUser = state => {
-  const allUsers = state.userReducer;
+  const allUsers = state.usersReducer;
   const currentUserId = state.currentUser;
 
   if (currentUserId) {

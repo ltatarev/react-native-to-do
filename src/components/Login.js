@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
-
 import {
   StyleSheet,
   TextInput,
@@ -9,7 +8,10 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import { addUser, login } from '../actions/addUser';
+import PropTypes from 'prop-types';
+
+import actions from '../actions';
+import services from '../services';
 
 class Login extends Component {
   constructor(props) {
@@ -17,18 +19,31 @@ class Login extends Component {
     this.state = { username: '' };
   }
 
-  addNewUser = username => {
-    if (this.existingUserId(username) != null) {
-      this.props.login(this.existingUserId(username));
+  static get propTypes() {
+    return {
+      navigation: PropTypes.any,
+      users: PropTypes.any,
+      loginDispatch: PropTypes.func,
+      addUserDispatch: PropTypes.func,
+    };
+  }
+
+  addNewUser(username) {
+    const { navigation, users, loginDispatch, addUserDispatch } = this.props;
+    const existingId = this.existingUserId(username);
+    if (existingId != null) {
+      loginDispatch(existingId);
     } else {
-      this.props.addUser(username);
+      const newId = services.nextUserId(users);
+      addUserDispatch(newId, username);
     }
     this.setState({ username: '' });
-    this.props.navigation.navigate('Home');
-  };
+    navigation.navigate('Home');
+  }
 
   existingUserId(username) {
-    const foundUsers = Object.values(this.props.users).filter(
+    const { users } = this.props;
+    const foundUsers = Object.values(users).filter(
       user => user.username === username,
     );
     if (foundUsers.length === 0) {
@@ -38,21 +53,21 @@ class Login extends Component {
   }
 
   render() {
+    const { username } = this.state;
     return (
       <View style={styles.container}>
         <TextInput
           style={{ padding: 10, fontSize: 20 }}
           placeholder="Username"
-          onChangeText={username => this.setState({ username })}
-          value={this.state.username}
+          onChangeText={name => {
+            this.setState({ username: name });
+          }}
+          value={username}
         />
         <TouchableOpacity
-          disabled={
-            !this.state.username ||
-            (this.state.username.match('\\s+') ? true : false)
-          }
+          disabled={!username || username.match('\\s+')}
           onPress={() => {
-            this.addNewUser(this.state.username);
+            this.addNewUser(username);
           }}
         >
           <Text>LOGIN</Text>
@@ -79,7 +94,16 @@ const mapStateToProps = state => {
   return { users: state.usersReducer };
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    addUserDispatch: (id, username) => {
+      dispatch(actions.addUser(id, username));
+    },
+    loginDispatch: content => dispatch(actions.login(content)),
+  };
+};
+
 export default connect(
   mapStateToProps,
-  { addUser, login },
+  mapDispatchToProps,
 )(withNavigation(Login));

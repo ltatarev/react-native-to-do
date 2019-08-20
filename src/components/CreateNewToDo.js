@@ -3,41 +3,59 @@ import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import { StyleSheet, TextInput, View, Button } from 'react-native';
 
-import { addTodo, ADD_TODO } from '../actions/addTodo';
+import PropTypes from 'prop-types';
+import actions from '../actions';
+import services from '../services';
 
 class CreateNewToDo extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: '',
+      todoText: '',
       currentListId: this.getNavigationParams().currentListId,
     };
   }
 
-  getNavigationParams() {
-    return this.props.navigation.state.params || {};
+  static get propTypes() {
+    return {
+      navigation: PropTypes.any,
+      addTodoDispatch: PropTypes.func,
+      todos: PropTypes.any,
+    };
   }
 
-  addNewTodo = (text, currentListId) => {
-    this.props.addTodo(text, currentListId);
-    this.setState({ text: '' });
-    this.props.navigation.navigate('EditExistingList', {
-      currentListId: this.state.currentListId,
+  getNavigationParams() {
+    const { navigation } = this.props;
+    return navigation.state.params || {};
+  }
+
+  addNewTodo(todoText) {
+    const { addTodoDispatch, navigation, todos } = this.props;
+    const { currentListId } = this.state;
+    const id = services.nextTodoId(todos);
+    addTodoDispatch(id, todoText, currentListId);
+
+    this.setState({ todoText: '' });
+    navigation.navigate('EditExistingList', {
+      currentListId,
     });
-  };
+  }
 
   render() {
+    const { todoText } = this.state;
+
     return (
       <View style={styles.container}>
         <TextInput
           style={{ padding: 10, fontSize: 20 }}
           placeholder="Add new task"
-          onChangeText={text => this.setState({ text })}
-          value={this.state.text}
+          onChangeText={text => this.setState({ todoText: text })}
+          value={todoText}
         />
+
         <Button
           onPress={() => {
-            this.addNewTodo(this.state.text, this.state.currentListId);
+            this.addNewTodo(todoText);
           }}
           title="+"
         />
@@ -54,7 +72,21 @@ const styles = StyleSheet.create({
   },
 });
 
+const mapStateToProps = state => {
+  return {
+    todos: state.todoReducer,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addTodoDispatch: (id, name, listId) => {
+      dispatch(actions.addTodo(id, name, listId));
+    },
+  };
+};
+
 export default connect(
-  null,
-  { addTodo },
+  mapStateToProps,
+  mapDispatchToProps,
 )(withNavigation(CreateNewToDo));

@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { toggleTodo } from '../actions/addTodo';
+import PropTypes from 'prop-types';
+import actions from '../actions';
 
 class EditExistingList extends Component {
   constructor(props) {
@@ -21,26 +22,33 @@ class EditExistingList extends Component {
     };
   }
 
-  getNavigationParams() {
-    return this.props.navigation.state.params || {};
+  static get propTypes() {
+    return {
+      navigation: PropTypes.any,
+      todos: PropTypes.any,
+      toggleTodoDispatch: PropTypes.func,
+    };
   }
 
-  toggleTodo = id => {
-    this.props.toggleTodo(id);
-  };
+  getNavigationParams() {
+    const { navigation } = this.props;
+    return navigation.state.params || {};
+  }
 
   render() {
-    const todoLen = this.props.todos.length;
+    const { todos, toggleTodoDispatch, navigation } = this.props;
+    const { currentListId } = this.state;
+    const todoLen = todos.length;
     return (
       <View style={styles.container}>
         <Text>{todoLen ? '' : 'No tasks created yet :('}</Text>
         <FlatList
-          data={this.props.todos}
+          data={todos}
           renderItem={({ item }) => (
             <TouchableOpacity
               key={item.id}
               onPress={() => {
-                this.toggleTodo(item.id);
+                toggleTodoDispatch(item.id);
               }}
             >
               <Text
@@ -56,8 +64,8 @@ class EditExistingList extends Component {
         />
         <Button
           onPress={() => {
-            this.props.navigation.navigate('CreateNewToDo', {
-              currentListId: this.state.currentListId,
+            navigation.navigate('CreateNewToDo', {
+              currentListId,
             });
           }}
           title="Add new task"
@@ -85,7 +93,13 @@ const mapStateToProps = state => {
   };
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleTodoDispatch: id => dispatch(actions.toggleTodo(id)),
+  };
+};
+
 export default connect(
   mapStateToProps,
-  { toggleTodo },
+  mapDispatchToProps,
 )(withNavigation(EditExistingList));

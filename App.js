@@ -31,7 +31,7 @@ const pReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = createStore(pReducer, applyMiddleware(logger));
 export const persistor = persistStore(store);
-/* persistor.purge(); */
+persistor.purge();
 
 /* export const store = createStore(rootReducer, applyMiddleware(logger));
  */

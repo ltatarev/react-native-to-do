@@ -1,21 +1,18 @@
-export const ADD_LIST = 'ADD_LIST';
-export const SET_CURRENT_LIST = 'SET_CURRENT_LIST';
+import { ADD_LIST, SET_CURRENT_LIST } from './actionTypes';
 
-let nextListId = 0;
-
-export const addList = (name, userId) => ({
+export const addList = (id, name, userId) => ({
   type: ADD_LIST,
   payload: {
-    id: nextListId++,
+    id,
     name,
     userId,
   },
 });
 
-export const setCurrentList = (userId, id) => ({
+export const setCurrentList = (id, userId) => ({
   type: SET_CURRENT_LIST,
   payload: {
-    userId,
     id,
+    userId,
   },
 });

@@ -1,44 +1,55 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Button, FlatList, StyleSheet, View } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import { logOut } from '../actions/addUser';
+import PropTypes from 'prop-types';
+import actions from '../actions';
 
-class Home extends Component {
+class Home extends PureComponent {
+  static get propTypes() {
+    return {
+      navigation: PropTypes.any,
+      currentUserId: PropTypes.any,
+      logOutDispatch: PropTypes.func,
+    };
+  }
+
+  renderItemToButton = ({ item }) => {
+    const { currentUserId, navigation, logOutDispatch } = this.props;
+    const userId = currentUserId;
+    return (
+      <Button
+        onPress={() => {
+          if (item.key === 'Log out') {
+            logOutDispatch(userId);
+            navigation.navigate(item.route);
+          } else {
+            navigation.navigate(item.route, {
+              userId,
+            });
+          }
+        }}
+        title={item.key}
+      />
+    );
+  };
+
   render() {
+    const flatListData = [
+      {
+        key: 'Create new list',
+        route: 'CreateNewList',
+      },
+      {
+        key: 'Open existing',
+        route: 'OpenExistingList',
+      },
+      { key: 'Log out', route: 'Login' },
+    ];
     return (
       <View style={styles.container}>
-        <FlatList
-          data={[
-            {
-              key: 'Create new list',
-              route: 'CreateNewList',
-              param: this.props.currentUserId,
-            },
-            {
-              key: 'Open existing',
-              route: 'OpenExistingList',
-              param: this.props.currentUserId,
-            },
-            { key: 'Log out', route: 'Login' },
-          ]}
-          renderItem={({ item }) => (
-            <Button
-              onPress={() => {
-                if (item.key === 'Log out') {
-                  this.props.logOut(this.props.currentUserId);
-                  this.props.navigation.navigate(item.route);
-                } else {
-                  this.props.navigation.navigate(item.route, {
-                    userId: item.param,
-                  });
-                }
-              }}
-              title={item.key}
-            />
-          )}
-        />
+        <FlatList data={flatListData} renderItem={this.renderItemToButton} />
       </View>
     );
   }
@@ -54,13 +65,19 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    currentUserId: state.currentUserReducer
-      ? state.currentUserReducer[0].currentUser
-      : null,
+    currentUserId: state.currentUserReducer[0].currentUser,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logOutDispatch: id => {
+      dispatch(actions.logOut(id));
+    },
   };
 };
 
 export default connect(
   mapStateToProps,
-  { logOut },
+  mapDispatchToProps,
 )(withNavigation(Home));

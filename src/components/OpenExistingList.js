@@ -1,25 +1,35 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withNavigation } from 'react-navigation';
 import { StyleSheet, Button, FlatList, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
-import { setCurrentList } from '../actions/addList';
+import PropTypes from 'prop-types';
+import actions from '../actions';
 
-class OpenExistingList extends Component {
-  setCurrentList = (userId, id) => {
-    this.props.setCurrentList(userId, id);
-    this.props.navigation.navigate('EditExistingList', {
+class OpenExistingList extends PureComponent {
+  static get propTypes() {
+    return {
+      lists: PropTypes.any,
+      setCurrentListDispatch: PropTypes.func,
+    };
+  }
+
+  setCurrentList(userId, id) {
+    const { navigation, setCurrentListDispatch } = this.props;
+    setCurrentListDispatch(id, userId);
+    navigation.navigate('EditExistingList', {
       currentListId: id,
     });
-  };
+  }
 
   render() {
-    let listLen = this.props.lists.length;
+    const { lists } = this.props;
+    const listLen = lists.length;
     return (
       <View style={styles.container}>
         <Text>{listLen ? '' : 'No lists created yet :('}</Text>
         <FlatList
-          data={this.props.lists}
+          data={lists}
           renderItem={({ item }) => (
             <Button
               onPress={() => this.setCurrentList(item.userId, item.id)}
@@ -43,15 +53,21 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    lists: state.currentUserReducer
-      ? state.listReducer.filter(
-          list => list.userId === state.currentUserReducer[0].currentUser,
-        )
-      : null,
+    lists: state.listReducer.filter(
+      list => list.userId === state.currentUserReducer[0].currentUser,
+    ),
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setCurrentListDispatch: (id, userId) => {
+      dispatch(actions.setCurrentList(id, userId));
+    },
   };
 };
 
 export default connect(
   mapStateToProps,
-  { setCurrentList },
+  mapDispatchToProps,
 )(withNavigation(OpenExistingList));

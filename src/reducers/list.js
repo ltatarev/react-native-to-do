@@ -1,6 +1,8 @@
+import { ADD_LIST } from '../actions/actionTypes';
+
 const listReducer = (state = [], action) => {
   switch (action.type) {
-    case 'ADD_LIST':
+    case ADD_LIST:
       return [
         ...state,
         {

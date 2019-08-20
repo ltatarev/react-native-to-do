@@ -2,15 +2,9 @@ import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
 import { StyleSheet, Button, View, TextInput } from 'react-native';
 import { connect } from 'react-redux';
-import { addList, ADD_LIST } from '../actions/addList';
-
-const mapDispatchToProps = dispatch => {
-  return {
-    addList: listName => {
-      dispatch({ type: ADD_LIST, payload: listName });
-    },
-  };
-};
+import PropTypes from 'prop-types';
+import actions from '../actions';
+import services from '../services';
 
 class CreateNewList extends Component {
   constructor(props) {
@@ -18,24 +12,38 @@ class CreateNewList extends Component {
     this.state = { listName: '' };
   }
 
-  addNewList = (listName, currentUserId) => {
-    this.props.addList(listName, currentUserId);
+  static get propTypes() {
+    return {
+      navigation: PropTypes.any,
+      lists: PropTypes.any,
+      currentUserId: PropTypes.any,
+      addListDispatch: PropTypes.func,
+    };
+  }
+
+  addNewList(name) {
+    const { addListDispatch, navigation, lists, currentUserId } = this.props;
+    const id = services.nextListId(lists);
+    addListDispatch(id, name, currentUserId);
     this.setState({ listName: '' });
-    this.props.navigation.navigate('Home');
-  };
+    navigation.navigate('Home');
+  }
 
   render() {
+    const { listName } = this.state;
     return (
       <View style={styles.container}>
         <TextInput
           style={{ padding: 10, fontSize: 20 }}
           placeholder="List name"
-          onChangeText={listName => this.setState({ listName })}
-          value={this.state.listName}
+          onChangeText={name => {
+            this.setState({ listName: name });
+          }}
+          value={listName}
         />
         <Button
           onPress={() => {
-            this.addNewList(this.state.listName, this.props.currentUserId);
+            this.addNewList(listName);
           }}
           title="Create list"
         />
@@ -54,13 +62,20 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    currentUserId: state.currentUserReducer
-      ? state.currentUserReducer[0].currentUser
-      : null,
+    currentUserId: state.currentUserReducer[0].currentUser,
+    lists: state.listReducer,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addListDispatch: (id, name, userId) => {
+      dispatch(actions.addList(id, name, userId));
+    },
   };
 };
 
 export default connect(
   mapStateToProps,
-  { addList },
+  mapDispatchToProps,
 )(withNavigation(CreateNewList));

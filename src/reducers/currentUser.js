@@ -1,5 +1,9 @@
-import { ADD_USER, LOG_OUT, LOGIN } from '../actions/addUser';
-import { SET_CURRENT_LIST } from '../actions/addList';
+import {
+  ADD_USER,
+  LOG_OUT,
+  LOGIN,
+  SET_CURRENT_LIST,
+} from '../actions/actionTypes';
 
 const currentUserReducer = (state = [], action) => {
   switch (action.type) {
@@ -22,8 +26,8 @@ const currentUserReducer = (state = [], action) => {
     case SET_CURRENT_LIST:
       return [
         {
-          currentUser: action.payload.userId,
           currentList: action.payload.id,
+          currentUser: action.payload.userId,
         },
       ];
     default:

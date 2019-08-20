@@ -90,18 +90,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
-  return { users: state.usersReducer };
-};
+const mapStateToProps = state => ({ users: state.usersReducer });
 
-const mapDispatchToProps = dispatch => {
-  return {
-    addUserDispatch: (id, username) => {
-      dispatch(actions.addUser(id, username));
-    },
-    loginDispatch: content => dispatch(actions.login(content)),
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  addUserDispatch: (id, username) => {
+    dispatch(actions.addUser(id, username));
+  },
+  loginDispatch: content => dispatch(actions.login(content)),
+});
 
 export default connect(
   mapStateToProps,

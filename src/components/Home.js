@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
 import actions from '../actions';
+import selectors from '../selectors';
 
 class Home extends PureComponent {
   static get propTypes() {
@@ -63,19 +64,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
-  return {
-    currentUserId: state.currentUserReducer[0].currentUser,
-  };
-};
+const mapStateToProps = state => ({
+  currentUserId: selectors.selectCurrentUser(state),
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    logOutDispatch: id => {
-      dispatch(actions.logOut(id));
-    },
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  logOutDispatch: id => {
+    dispatch(actions.logOut(id));
+  },
+});
 
 export default connect(
   mapStateToProps,

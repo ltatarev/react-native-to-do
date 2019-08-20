@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import actions from '../actions';
 import services from '../services';
+import selectCurrentUser from '../selectors';
 
 class CreateNewList extends Component {
   constructor(props) {
@@ -60,20 +61,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
-  return {
-    currentUserId: state.currentUserReducer[0].currentUser,
-    lists: state.listReducer,
-  };
-};
+const mapStateToProps = state => ({
+  currentUserId: selectCurrentUser(state),
+  lists: state.listReducer,
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    addListDispatch: (id, name, userId) => {
-      dispatch(actions.addList(id, name, userId));
-    },
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  addListDispatch: (id, name, userId) => {
+    dispatch(actions.addList(id, name, userId));
+  },
+});
 
 export default connect(
   mapStateToProps,

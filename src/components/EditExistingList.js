@@ -13,6 +13,7 @@ import {
 
 import PropTypes from 'prop-types';
 import actions from '../actions';
+import selectCurrentList from '../selectors';
 
 class EditExistingList extends Component {
   constructor(props) {
@@ -41,7 +42,7 @@ class EditExistingList extends Component {
     const todoLen = todos.length;
     return (
       <View style={styles.container}>
-        <Text>{todoLen ? '' : 'No tasks created yet :('}</Text>
+        <Text>{todoLen ? '' : 'No tasks created yet 😕'}</Text>
         <FlatList
           data={todos}
           renderItem={({ item }) => (
@@ -83,21 +84,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
-  return {
-    todos: state.currentUserReducer
-      ? state.todoReducer.filter(
-          todo => todo.listId === state.currentUserReducer[0].currentList,
-        )
-      : null,
-  };
-};
+const mapStateToProps = state => ({
+  todos: state.todoReducer.filter(
+    todo => todo.listId === selectCurrentList(state),
+  ),
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    toggleTodoDispatch: id => dispatch(actions.toggleTodo(id)),
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  toggleTodoDispatch: id => dispatch(actions.toggleTodo(id)),
+});
 
 export default connect(
   mapStateToProps,

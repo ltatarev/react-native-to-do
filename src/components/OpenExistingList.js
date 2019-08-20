@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
 import actions from '../actions';
+import selectCurrentList from '../selectors';
 
 class OpenExistingList extends PureComponent {
   static get propTypes() {
@@ -22,6 +23,13 @@ class OpenExistingList extends PureComponent {
     });
   }
 
+  renderItemToButton = ({ item }) => (
+    <Button
+      onPress={() => this.setCurrentList(item.userId, item.id)}
+      title={item.name}
+    />
+  );
+
   render() {
     const { lists } = this.props;
     const listLen = lists.length;
@@ -30,12 +38,7 @@ class OpenExistingList extends PureComponent {
         <Text>{listLen ? '' : 'No lists created yet :('}</Text>
         <FlatList
           data={lists}
-          renderItem={({ item }) => (
-            <Button
-              onPress={() => this.setCurrentList(item.userId, item.id)}
-              title={item.name}
-            />
-          )}
+          renderItem={this.renderItemToButton}
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
@@ -51,21 +54,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
-  return {
-    lists: state.listReducer.filter(
-      list => list.userId === state.currentUserReducer[0].currentUser,
-    ),
-  };
-};
+const mapStateToProps = state => ({
+  lists: state.listReducer.filter(
+    list => list.userId === selectCurrentList(state),
+  ),
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    setCurrentListDispatch: (id, userId) => {
-      dispatch(actions.setCurrentList(id, userId));
-    },
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  setCurrentListDispatch: (id, userId) => {
+    dispatch(actions.setCurrentList(id, userId));
+  },
+});
 
 export default connect(
   mapStateToProps,

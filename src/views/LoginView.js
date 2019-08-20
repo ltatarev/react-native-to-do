@@ -6,7 +6,7 @@ import Login from '../components/Login';
 
 class LoginView extends Component {
   static navigationOptions = {
-    headerTitle: 'Login',
+    headerTitle: '',
   };
 
   render() {

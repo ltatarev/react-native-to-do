@@ -72,19 +72,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
-  return {
-    todos: state.todoReducer,
-  };
-};
+const mapStateToProps = state => ({
+  todos: state.todoReducer,
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    addTodoDispatch: (id, name, listId) => {
-      dispatch(actions.addTodo(id, name, listId));
-    },
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  addTodoDispatch: (id, name, listId) => {
+    dispatch(actions.addTodo(id, name, listId));
+  },
+});
 
 export default connect(
   mapStateToProps,

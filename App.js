@@ -31,7 +31,7 @@ const pReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = createStore(pReducer, applyMiddleware(logger));
 export const persistor = persistStore(store);
-persistor.purge();
+/* persistor.purge(); */
 
 /* export const store = createStore(rootReducer, applyMiddleware(logger));
  */
@@ -52,14 +52,12 @@ const AppNavigator = createStackNavigator(
 
 const AppContainer = createAppContainer(AppNavigator);
 
-export const App = () => {
-  return (
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <AppContainer />
-      </PersistGate>
-    </Provider>
-  );
-};
+export const App = () => (
+  <Provider store={store}>
+    <PersistGate persistor={persistor}>
+      <AppContainer />
+    </PersistGate>
+  </Provider>
+);
 
 export default App;

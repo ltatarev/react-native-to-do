@@ -7,10 +7,11 @@ import CreateNewList from '../components/CreateNewList';
 
 class CreateNewListView extends Component {
   static navigationOptions = {
-    headerTitle: '📃',
+    headerTitle: 'Create new list 📃',
     headerStyle: {
-      backgroundColor: '#539C90',
+      backgroundColor: '#66CBBB',
     },
+    headerBackTitle: '📃',
   };
 
   render() {
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#6AC8B9',
+    backgroundColor: '#B3DFD8',
   },
 });
 

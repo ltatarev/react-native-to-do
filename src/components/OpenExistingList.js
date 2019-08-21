@@ -35,7 +35,7 @@ class OpenExistingList extends PureComponent {
       onPress={() => this.setCurrentList(item.userId, item.id)}
       key={item.key}
     >
-      <Text style={styles.text}>{item.name}</Text>
+      <Text style={styles.text}>- {item.name}</Text>
     </TouchableOpacity>
   );
 

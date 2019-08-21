@@ -49,7 +49,7 @@ class EditExistingList extends Component {
             });
           }}
         >
-          <Text style={{ fontWeight: 'bold', fontSize: 20 }}>+</Text>
+          <Text style={styles.addNewText}>+</Text>
         </TouchableOpacity>
         <Text style={styles.none}>
           {todoLen ? '' : 'No tasks created yet 😕'}
@@ -67,6 +67,8 @@ class EditExistingList extends Component {
               <Text
                 style={{
                   textDecorationLine: item.completed ? 'line-through' : 'none',
+                  fontSize: 20,
+                  letterSpacing: 2,
                 }}
               >
                 {item.name}
@@ -83,15 +85,26 @@ class EditExistingList extends Component {
 const styles = StyleSheet.create({
   none: {
     fontSize: 20,
-    marginTop: 20,
     alignSelf: 'center',
+    fontStyle: 'italic',
   },
   addNew: {
     margin: 10,
+    height: 30,
+    width: 30,
     alignSelf: 'flex-end',
     padding: 10,
-    backgroundColor: '#A35DE1',
-    borderRadius: 25,
+    backgroundColor: '#9BE3A1',
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addNewText: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    marginTop: -6,
   },
   list: {
     alignSelf: 'center',

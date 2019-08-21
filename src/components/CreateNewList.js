@@ -50,7 +50,7 @@ class CreateNewList extends Component {
         />
         <TouchableOpacity
           style={styles.submit}
-          disabled={!listName || listName.match('\\s+')}
+          disabled={!listName}
           onPress={() => {
             this.addNewList(listName);
           }}
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
   },
   submit: {
-    backgroundColor: '#47867B',
+    backgroundColor: '#66CBBB',
     borderRadius: 25,
   },
   text: {

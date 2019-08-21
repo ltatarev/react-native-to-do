@@ -5,10 +5,11 @@ import OpenExistingList from '../components/OpenExistingList';
 
 export default class OpenExistingListView extends Component {
   static navigationOptions = {
-    headerTitle: '🔖',
+    headerTitle: 'Open existing list 🔖',
     headerStyle: {
       backgroundColor: '#D58A81',
     },
+    headerBackTitle: '🔖',
   };
 
   render() {

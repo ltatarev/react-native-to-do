@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
-import { StyleSheet, TextInput, View, Button } from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 
 import PropTypes from 'prop-types';
 import actions from '../actions';
@@ -45,7 +51,7 @@ class CreateNewToDo extends Component {
     const { todoText } = this.state;
 
     return (
-      <View style={styles.container}>
+      <View>
         <TextInput
           style={{ padding: 10, fontSize: 20 }}
           placeholder="Add new task"
@@ -53,22 +59,36 @@ class CreateNewToDo extends Component {
           value={todoText}
         />
 
-        <Button
-          onPress={() => {
-            this.addNewTodo(todoText);
-          }}
-          title="+"
-        />
+        <TouchableOpacity
+          style={styles.addNew}
+          disabled={!todoText || !!todoText.match('\\s+')}
+          onPress={() => this.addNewTodo(todoText)}
+        >
+          <Text style={styles.addNewText}>+</Text>
+        </TouchableOpacity>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  addNew: {
+    margin: 10,
+    height: 30,
+    width: 30,
+    alignSelf: 'center',
+    padding: 10,
+    backgroundColor: '#D1A2DC',
+    borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  addNewText: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    marginTop: -6,
   },
 });
 

@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
   },
   submit: {
-    backgroundColor: '#56cbf9',
+    backgroundColor: '#9AB7FC',
     borderRadius: 25,
   },
   text: {

@@ -6,7 +6,7 @@ import Login from '../components/Login';
 
 class LoginView extends Component {
   static navigationOptions = {
-    headerTitle: '',
+    headerTitle: 'Login',
   };
 
   render() {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#c9d7f8',
+    backgroundColor: '#DAD9E2',
   },
 });
 

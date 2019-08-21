@@ -16,8 +16,10 @@ import services from '../services';
 class CreateNewToDo extends Component {
   constructor(props) {
     super(props);
+    this.addNewTodo = this.addNewTodo.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
     this.state = {
-      todoText: '',
+      todoName: '',
       currentListId: this.getNavigationParams().currentListId,
     };
   }
@@ -35,36 +37,55 @@ class CreateNewToDo extends Component {
     return navigation.state.params || {};
   }
 
-  addNewTodo(todoText) {
+  addNewTodo() {
     const { addTodoDispatch, navigation, todos } = this.props;
-    const { currentListId } = this.state;
+    const { currentListId, todoName } = this.state;
+    // assign proper id
     const id = services.nextTodoId(todos);
-    addTodoDispatch(id, todoText, currentListId);
-
-    this.setState({ todoText: '' });
+    // add new todo
+    addTodoDispatch(id, todoName, currentListId);
+    // reseting state and navigating with param
+    this.setState({ todoName: '' });
     navigation.navigate('EditExistingList', {
       currentListId,
     });
   }
 
-  render() {
-    const { todoText } = this.state;
+  // checks if input is empty
+  disabled() {
+    const { todoName } = this.state;
+    return !todoName || !todoName.match('[^\\s]+');
+  }
 
+  handleTextChange(name) {
+    this.setState({ todoName: name });
+  }
+
+  render() {
+    const { todoName } = this.state;
     return (
       <View>
         <TextInput
           style={{ padding: 10, fontSize: 20 }}
           placeholder="Add new task"
-          onChangeText={text => this.setState({ todoText: text })}
-          value={todoText}
+          onChangeText={this.handleTextChange}
+          value={todoName}
         />
 
         <TouchableOpacity
-          style={styles.addNew}
-          disabled={!todoText || !!todoText.match('\\s+')}
-          onPress={() => this.addNewTodo(todoText)}
+          style={
+            this.disabled() ? styles.submitButtonDisabled : styles.submitButton
+          }
+          disabled={this.disabled()}
+          onPress={this.addNewTodo}
         >
-          <Text style={styles.addNewText}>+</Text>
+          <Text
+            style={
+              this.disabled() ? styles.submitTextDisabled : styles.submitText
+            }
+          >
+            +
+          </Text>
         </TouchableOpacity>
       </View>
     );
@@ -72,23 +93,45 @@ class CreateNewToDo extends Component {
 }
 
 const styles = StyleSheet.create({
-  addNew: {
+  submitButton: {
     margin: 10,
     height: 30,
     width: 30,
     alignSelf: 'center',
     padding: 10,
-    backgroundColor: '#D1A2DC',
+    backgroundColor: '#80A0CE',
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  addNewText: {
+  submitButtonDisabled: {
+    opacity: 0.5,
+    margin: 10,
+    height: 30,
+    width: 30,
+    alignSelf: 'center',
+    padding: 10,
+    backgroundColor: '#80A0CE',
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  submitText: {
     fontSize: 17,
     fontWeight: 'bold',
     textAlign: 'center',
     textAlignVertical: 'center',
     marginTop: -6,
+    color: 'white',
+  },
+  submitTextDisabled: {
+    opacity: 0.5,
+    fontSize: 17,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    marginTop: -6,
+    color: 'white',
   },
 });
 

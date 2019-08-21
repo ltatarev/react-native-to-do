@@ -16,6 +16,8 @@ import selectors from '../selectors';
 class CreateNewList extends Component {
   constructor(props) {
     super(props);
+    this.handleTextChange = this.handleTextChange.bind(this);
+    this.addNewList = this.addNewList.bind(this);
     this.state = { listName: '' };
   }
 
@@ -28,12 +30,24 @@ class CreateNewList extends Component {
     };
   }
 
-  addNewList(name) {
+  // method for handling submit
+  addNewList() {
     const { addListDispatch, navigation, lists, currentUserId } = this.props;
+    const { listName } = this.state;
     const id = services.nextListId(lists);
-    addListDispatch(id, name, currentUserId);
+    addListDispatch(id, listName, currentUserId);
     this.setState({ listName: '' });
     navigation.navigate('Home');
+  }
+
+  // checks if input is empty
+  disabled() {
+    const { listName } = this.state;
+    return !listName || !listName.match('[^\\s]+');
+  }
+
+  handleTextChange(name) {
+    this.setState({ listName: name });
   }
 
   render() {
@@ -41,21 +55,25 @@ class CreateNewList extends Component {
     return (
       <View style={styles.container}>
         <TextInput
-          style={styles.title}
+          style={styles.textInput}
           placeholder="List name"
-          onChangeText={name => {
-            this.setState({ listName: name });
-          }}
+          onChangeText={this.handleTextChange}
           value={listName}
         />
         <TouchableOpacity
-          style={styles.submit}
-          disabled={!listName}
-          onPress={() => {
-            this.addNewList(listName);
-          }}
+          style={
+            this.disabled() ? styles.submitButtonDisabled : styles.submitButton
+          }
+          disabled={this.disabled()}
+          onPress={this.addNewList}
         >
-          <Text style={styles.text}>CREATE LIST</Text>
+          <Text
+            style={
+              this.disabled() ? styles.submitTextDisabled : styles.submitText
+            }
+          >
+            CREATE LIST
+          </Text>
         </TouchableOpacity>
       </View>
     );
@@ -68,17 +86,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {
+  textInput: {
     justifyContent: 'center',
     padding: 20,
     fontSize: 25,
     letterSpacing: 2,
   },
-  submit: {
-    backgroundColor: '#66CBBB',
+  submitButton: {
+    backgroundColor: '#4E8ECE',
     borderRadius: 25,
   },
-  text: {
+  submitButtonDisabled: {
+    opacity: 0.5,
+    backgroundColor: '#88B8E8',
+    borderRadius: 25,
+  },
+  submitText: {
+    padding: 12,
+    fontSize: 15,
+    fontWeight: 'bold',
+    fontFamily: 'Avenir',
+    color: 'white',
+    letterSpacing: 2,
+  },
+  submitTextDisabled: {
+    opacity: 0.5,
+    color: 'white',
     padding: 12,
     fontSize: 15,
     fontWeight: 'bold',

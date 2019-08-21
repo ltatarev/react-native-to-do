@@ -16,30 +16,38 @@ class Home extends PureComponent {
     };
   }
 
-  renderButtonOnPress = ({ item }) => {
+  // rendering onPress function for menu items (navigation or log out)
+  renderOnPress = ({ item }) => {
     const { currentUserId, navigation, logOutDispatch } = this.props;
     const userId = currentUserId;
     if (item.key === 'Log out') {
+      // logs out user and redirects to loginView
       logOutDispatch(userId);
       navigation.navigate(item.route);
     } else {
+      // navigates to create or open list with param userId
       navigation.navigate(item.route, {
         userId,
       });
     }
   };
 
-  renderItemToTouchOpac = ({ item }) => (
+  // rendering TouchableOpacity for menu items
+  renderItem = ({ item }) => (
     <TouchableOpacity
-      style={styles.button}
-      onPress={() => this.renderButtonOnPress({ item })}
+      style={styles.menuItem}
+      onPress={() => this.renderOnPress({ item })}
       key={item.key}
     >
-      <Text style={item.key === 'Log out' ? styles.log : styles.text}>
+      <Text
+        style={item.key === 'Log out' ? styles.logOutText : styles.menuItemText}
+      >
         {item.key}
       </Text>
     </TouchableOpacity>
   );
+
+  keyExtractor = (item, index) => index.toString();
 
   render() {
     const flatListData = [
@@ -54,22 +62,26 @@ class Home extends PureComponent {
       { key: 'Log out', route: 'Login' },
     ];
     return (
-      <FlatList data={flatListData} renderItem={this.renderItemToTouchOpac} />
+      <FlatList
+        data={flatListData}
+        keyExtractor={this.keyExtractor}
+        renderItem={this.renderItem}
+      />
     );
   }
 }
 
 const styles = StyleSheet.create({
-  button: {
+  menuItem: {
     alignSelf: 'center',
     padding: 10,
   },
-  text: {
+  menuItemText: {
     fontWeight: 'bold',
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
-  log: {
+  logOutText: {
     fontWeight: 'bold',
     letterSpacing: 2,
     textTransform: 'uppercase',

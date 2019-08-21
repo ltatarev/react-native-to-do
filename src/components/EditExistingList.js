@@ -35,10 +35,11 @@ class EditExistingList extends Component {
     return navigation.state.params || {};
   }
 
+  keyExtractor = (item, index) => index.toString();
+
   render() {
     const { todos, toggleTodoDispatch, navigation } = this.props;
     const { currentListId } = this.state;
-    const todoLen = todos.length;
     return (
       <View>
         <TouchableOpacity
@@ -51,8 +52,8 @@ class EditExistingList extends Component {
         >
           <Text style={styles.addNewText}>+</Text>
         </TouchableOpacity>
-        <Text style={styles.none}>
-          {todoLen ? '' : 'No tasks created yet 😕'}
+        <Text style={styles.noneCreated}>
+          {todos.length ? '' : 'No tasks created yet 😕'}
         </Text>
         <FlatList
           style={styles.list}
@@ -65,17 +66,20 @@ class EditExistingList extends Component {
               }}
             >
               <Text
-                style={{
-                  textDecorationLine: item.completed ? 'line-through' : 'none',
-                  fontSize: 20,
-                  letterSpacing: 2,
-                }}
+                style={Object.assign(
+                  {
+                    textDecorationLine: item.completed
+                      ? 'line-through'
+                      : 'none',
+                  },
+                  styles.todo,
+                )}
               >
                 {item.name}
               </Text>
             </TouchableOpacity>
           )}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={this.keyExtractor}
         />
       </View>
     );
@@ -83,9 +87,10 @@ class EditExistingList extends Component {
 }
 
 const styles = StyleSheet.create({
-  none: {
-    fontSize: 20,
+  noneCreated: {
     alignSelf: 'center',
+    fontSize: 20,
+    fontFamily: 'Avenir',
     fontStyle: 'italic',
   },
   addNew: {
@@ -94,7 +99,7 @@ const styles = StyleSheet.create({
     width: 30,
     alignSelf: 'flex-end',
     padding: 10,
-    backgroundColor: '#9BE3A1',
+    backgroundColor: '#4E8ECE',
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
@@ -105,12 +110,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
     marginTop: -6,
+    color: 'white',
   },
   list: {
     alignSelf: 'center',
     padding: 10,
     borderRadius: 5,
   },
+  todo: { fontSize: 20, letterSpacing: 2, padding: 10 },
 });
 
 const mapStateToProps = state => ({

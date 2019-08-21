@@ -7,7 +7,8 @@ export default class CreateNewTodoView extends Component {
   static navigationOptions = {
     headerTitle: 'Create new task 📑',
     headerStyle: {
-      backgroundColor: '#D1A2DC',
+      backgroundColor: '#DAD9E2',
+      borderBottomWidth: 0,
     },
     headerBackTitle: '📑',
   };
@@ -26,6 +27,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E4D8E7',
+    backgroundColor: '#DAD9E2',
   },
 });

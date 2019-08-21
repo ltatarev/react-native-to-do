@@ -8,8 +8,10 @@ export default class HomeView extends Component {
     headerTitle: '🏠',
     headerLeft: null,
     headerStyle: {
-      backgroundColor: '#A37E9B',
+      backgroundColor: '#C4CDDF',
+      borderBottomWidth: 0,
     },
+    headerTitleStyle: { color: 'white' },
   };
 
   render() {
@@ -27,6 +29,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E0ACD5',
+    backgroundColor: '#C4CDDF',
   },
 });

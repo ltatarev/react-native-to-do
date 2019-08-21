@@ -9,7 +9,8 @@ class CreateNewListView extends Component {
   static navigationOptions = {
     headerTitle: 'Create new list 📃',
     headerStyle: {
-      backgroundColor: '#66CBBB',
+      backgroundColor: '#C4CDDF',
+      borderBottomWidth: 0,
     },
     headerBackTitle: '📃',
   };
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#B3DFD8',
+    backgroundColor: '#C4CDDF',
   },
 });
 

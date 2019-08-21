@@ -7,7 +7,8 @@ export default class OpenExistingListView extends Component {
   static navigationOptions = {
     headerTitle: 'Open existing list 🔖',
     headerStyle: {
-      backgroundColor: '#D58A81',
+      backgroundColor: '#C4CDDF',
+      borderBottomWidth: 0,
     },
     headerBackTitle: '🔖',
   };
@@ -27,6 +28,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9B5AC',
+    backgroundColor: '#C4CDDF',
   },
 });

@@ -11,7 +11,8 @@ class EditExistingView extends Component {
   static navigationOptions = {
     headerTitle: 'Edit existing list 📝',
     headerStyle: {
-      backgroundColor: '#A8D2AB',
+      backgroundColor: '#C4CDDF',
+      borderBottomWidth: 0,
     },
     headerBackTitle: '📝',
   };
@@ -28,7 +29,7 @@ class EditExistingView extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#D8E7D9',
+    backgroundColor: '#C4CDDF',
   },
 });
 

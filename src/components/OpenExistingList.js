@@ -21,6 +21,7 @@ class OpenExistingList extends PureComponent {
     };
   }
 
+  // method for setting current list
   setCurrentList(userId, id) {
     const { navigation, setCurrentListDispatch } = this.props;
     setCurrentListDispatch(id, userId);
@@ -29,29 +30,30 @@ class OpenExistingList extends PureComponent {
     });
   }
 
-  renderItemToTouchOpac = ({ item }) => (
+  // render TouchableOpacity for menu items
+  renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.button}
       onPress={() => this.setCurrentList(item.userId, item.id)}
       key={item.key}
     >
-      <Text style={styles.text}>- {item.name}</Text>
+      <Text style={styles.itemText}>{item.name}</Text>
     </TouchableOpacity>
   );
 
+  keyExtractor = (item, index) => index.toString();
+
   render() {
     const { lists } = this.props;
-    const listLen = lists.length;
     return (
       <View>
-        <Text style={styles.none}>
-          {listLen ? '' : 'No lists created yet 😕'}
+        <Text style={styles.noneCreated}>
+          {lists.length ? '' : 'No lists created yet 😕'}
         </Text>
         <FlatList
-          style={styles.list}
           data={lists}
-          renderItem={this.renderItemToTouchOpac}
-          keyExtractor={(item, index) => index.toString()}
+          renderItem={this.renderItem}
+          keyExtractor={this.keyExtractor}
         />
       </View>
     );
@@ -64,16 +66,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  none: {
-    fontSize: 20,
+  noneCreated: {
     marginTop: 20,
+    fontSize: 20,
     fontStyle: 'italic',
+    fontFamily: 'Avenir',
   },
-  text: {
-    fontWeight: 'bold',
+  itemText: {
+    fontSize: 23,
     letterSpacing: 2,
     textTransform: 'uppercase',
-    alignSelf: 'auto',
+    alignSelf: 'center',
     padding: 15,
   },
 });

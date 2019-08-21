@@ -141,7 +141,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => ({ users: state.usersReducer });
+const mapStateToProps = state => ({
+  users: state.usersReducer,
+});
 
 const mapDispatchToProps = dispatch => ({
   addUserDispatch: (id, username) => {

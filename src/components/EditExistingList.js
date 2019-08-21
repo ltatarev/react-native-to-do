@@ -17,6 +17,7 @@ import selectors from '../selectors';
 class EditExistingList extends Component {
   constructor(props) {
     super(props);
+    this.navigateToCreateTodo = this.navigateToCreateTodo.bind(this);
     this.state = {
       currentListId: this.getNavigationParams().currentListId,
     };
@@ -37,18 +38,22 @@ class EditExistingList extends Component {
 
   keyExtractor = (item, index) => index.toString();
 
-  render() {
-    const { todos, toggleTodoDispatch, navigation } = this.props;
+  // handle navigation on "+" click
+  navigateToCreateTodo() {
+    const { navigation } = this.props;
     const { currentListId } = this.state;
+    navigation.navigate('CreateNewToDo', {
+      currentListId,
+    });
+  }
+
+  render() {
+    const { todos, toggleTodoDispatch } = this.props;
     return (
       <View>
         <TouchableOpacity
           style={styles.addNew}
-          onPress={() => {
-            navigation.navigate('CreateNewToDo', {
-              currentListId,
-            });
-          }}
+          onPress={this.navigateToCreateTodo}
         >
           <Text style={styles.addNewText}>+</Text>
         </TouchableOpacity>
@@ -56,7 +61,6 @@ class EditExistingList extends Component {
           {todos.length ? '' : 'No tasks created yet 😕'}
         </Text>
         <FlatList
-          style={styles.list}
           data={todos}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -112,12 +116,7 @@ const styles = StyleSheet.create({
     marginTop: -6,
     color: 'white',
   },
-  list: {
-    alignSelf: 'center',
-    padding: 10,
-    borderRadius: 5,
-  },
-  todo: { fontSize: 20, letterSpacing: 2, padding: 10 },
+  todo: { fontSize: 20, letterSpacing: 2, padding: 10, alignSelf: 'center' },
 });
 
 const mapStateToProps = state => ({

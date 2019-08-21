@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
-
+import { AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
@@ -18,7 +18,6 @@ import HomeView from './src/views/HomeView';
 import EditExistingListView from './src/views/EditExistingListView';
 
 import rootReducer from './src/reducers';
-
 const logger = createLogger();
 
 const persistConfig = {
@@ -57,10 +56,26 @@ const AppNavigator = createStackNavigator(
 
 const AppContainer = createAppContainer(AppNavigator);
 
-export const App = () => (
+const persistenceKey = 'persistenceKey';
+const persistNavigationState = async navState => {
+  try {
+    await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState));
+  } catch (err) {
+    // handle the error according to your needs
+  }
+};
+const loadNavigationState = async () => {
+  const jsonString = await AsyncStorage.getItem(persistenceKey);
+  return JSON.parse(jsonString);
+};
+
+const App = () => (
   <Provider store={store}>
     <PersistGate persistor={persistor}>
-      <AppContainer />
+      <AppContainer
+        persistNavigationState={persistNavigationState}
+        loadNavigationState={loadNavigationState}
+      />
     </PersistGate>
   </Provider>
 );

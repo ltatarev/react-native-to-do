@@ -1,5 +1,11 @@
 import React, { PureComponent } from 'react';
-import { TouchableOpacity, FlatList, Text, StyleSheet } from 'react-native';
+import {
+  TouchableOpacity,
+  FlatList,
+  Text,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 
@@ -11,6 +17,7 @@ class Home extends PureComponent {
   static get propTypes() {
     return {
       navigation: PropTypes.any,
+      username: PropTypes.any,
       currentUserId: PropTypes.any,
       logOutDispatch: PropTypes.func,
     };
@@ -32,7 +39,7 @@ class Home extends PureComponent {
     }
   };
 
-  // rendering TouchableOpacity for menu items
+  // render TouchableOpacity for menu items
   renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.menuItem}
@@ -50,6 +57,7 @@ class Home extends PureComponent {
   keyExtractor = (item, index) => index.toString();
 
   render() {
+    const { username } = this.props;
     const flatListData = [
       {
         key: 'Create new list',
@@ -62,27 +70,48 @@ class Home extends PureComponent {
       { key: 'Log out', route: 'Login' },
     ];
     return (
-      <FlatList
-        data={flatListData}
-        keyExtractor={this.keyExtractor}
-        renderItem={this.renderItem}
-      />
+      <View style={styles.menu}>
+        <Text style={Object.assign({}, styles.menuItem, styles.menuTitle)}>
+          <Text>Hello {username}!</Text>
+        </Text>
+        <View style={styles.menu}>
+          <FlatList
+            data={flatListData}
+            keyExtractor={this.keyExtractor}
+            renderItem={this.renderItem}
+          />
+        </View>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  menu: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+  },
   menuItem: {
     alignSelf: 'center',
     padding: 10,
   },
-  menuItemText: {
+  menuTitle: {
+    margin: 50,
     fontWeight: 'bold',
+    fontStyle: 'italic',
+    fontSize: 30,
+    letterSpacing: 3,
+    fontFamily: 'Avenir',
+  },
+  menuItemText: {
     letterSpacing: 2,
     textTransform: 'uppercase',
+    fontSize: 17,
   },
   logOutText: {
-    fontWeight: 'bold',
+    fontSize: 17,
     letterSpacing: 2,
     textTransform: 'uppercase',
     color: '#C4030C',
@@ -90,6 +119,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  username: selectors.selectCurrentUsername(state),
   currentUserId: selectors.selectCurrentUser(state),
 });
 

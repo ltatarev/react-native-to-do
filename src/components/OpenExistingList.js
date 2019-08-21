@@ -14,6 +14,11 @@ import actions from '../actions';
 import selectors from '../selectors';
 
 class OpenExistingList extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.setCurrentList = this.setCurrentList.bind(this);
+  }
+
   static get propTypes() {
     return {
       lists: PropTypes.any,
@@ -22,7 +27,7 @@ class OpenExistingList extends PureComponent {
   }
 
   // method for setting current list
-  setCurrentList(userId, id) {
+  setCurrentList(id, userId) {
     const { navigation, setCurrentListDispatch } = this.props;
     setCurrentListDispatch(id, userId);
     navigation.navigate('EditExistingList', {
@@ -34,8 +39,7 @@ class OpenExistingList extends PureComponent {
   renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.button}
-      onPress={() => this.setCurrentList(item.userId, item.id)}
-      key={item.key}
+      onPress={() => this.setCurrentList(item.id, item.userId)}
     >
       <Text style={styles.itemText}>{item.name}</Text>
     </TouchableOpacity>
@@ -73,7 +77,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir',
   },
   itemText: {
-    fontSize: 23,
+    fontSize: 18,
     letterSpacing: 2,
     textTransform: 'uppercase',
     alignSelf: 'center',
@@ -82,6 +86,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  currentUserId: selectors.selectCurrentUser(state),
   lists: state.listReducer.filter(
     list => list.userId === selectors.selectCurrentUser(state),
   ),

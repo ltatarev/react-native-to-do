@@ -9,3 +9,13 @@ export const selectCurrentUser = state => {
 
   return null;
 };
+
+export const selectCurrentUsername = state => {
+  const userId = selectCurrentUser(state);
+
+  if (userId != null) {
+    return state.usersReducer[userId].username;
+  }
+
+  return null;
+};

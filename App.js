@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import { AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
@@ -61,7 +61,7 @@ const persistNavigationState = async navState => {
   try {
     await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState));
   } catch (err) {
-    // handle the error according to your needs
+    // error
   }
 };
 const loadNavigationState = async () => {

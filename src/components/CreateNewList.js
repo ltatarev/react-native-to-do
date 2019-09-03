@@ -56,7 +56,7 @@ class CreateNewList extends Component {
       <View style={styles.container}>
         <TextInput
           style={styles.textInput}
-          placeholder="List name"
+          placeholder="List name "
           onChangeText={this.handleTextChange}
           value={listName}
         />

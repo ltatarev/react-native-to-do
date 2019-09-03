@@ -77,7 +77,7 @@ class Login extends Component {
       <View style={styles.container}>
         <TextInput
           style={styles.textInput}
-          placeholder="Username"
+          placeholder="Username "
           onChangeText={this.handleTextChange}
           value={username}
         />

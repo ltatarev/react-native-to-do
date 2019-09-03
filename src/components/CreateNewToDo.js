@@ -67,7 +67,7 @@ class CreateNewToDo extends Component {
       <View>
         <TextInput
           style={{ padding: 10, fontSize: 20 }}
-          placeholder="Add new task"
+          placeholder="Add new task "
           onChangeText={this.handleTextChange}
           value={todoName}
         />

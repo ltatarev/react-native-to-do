@@ -69,10 +69,11 @@ class Home extends PureComponent {
       },
       { key: 'Log out', route: 'Login' },
     ];
+    const welcomeText = `Hello, ${username}!`;
     return (
       <View style={styles.menu}>
         <Text style={Object.assign({}, styles.menuItem, styles.menuTitle)}>
-          <Text>Hello {username}!</Text>
+          <Text>{welcomeText}</Text>
         </Text>
         <View style={styles.menu}>
           <FlatList

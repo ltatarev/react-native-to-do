@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import OpenExistingList from '../components/OpenExistingList';
-import HomeView from './HomeView';
 
 export default class OpenExistingListView extends Component {
   static navigationOptions = {

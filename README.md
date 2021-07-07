@@ -1,4 +1,4 @@
-# 📚 To Do App
+# 📚 React Native To Do
 
 To Do app in React Native that lets you create to do lists and tasks, as well as toggling tasks as done.
 
